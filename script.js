@@ -1,11 +1,27 @@
-const tagIDs = ['tdf2024', 's11', 's14','s18']
-let elems = new Map();
+const tagIDs = ['tdf2024', 's11', 's14','s15', 's19']
+let elems = new Map()
+// Create the document
 for (let tag of tagIDs) {
-    let e = document.getElementById(tag)
-    e.addEventListener('click', function () {
+    var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = tag;
+    checkbox.name = tag;
+    checkbox.addEventListener('click', function () {
         showProfile()
     });
-    elems.set(tag, e)
+
+    var label = document.createElement('label');
+    label.htmlFor = tag;
+    label.appendChild(document.createTextNode("#" + tag));
+
+    var container = document.getElementById('filters');
+    container.appendChild(checkbox);
+    container.appendChild(label);
+    elems.set(tag, checkbox)
+    if (tag.includes("tdf")) {
+        var br = document.createElement('br');
+        container.appendChild(br);
+    }
 }
 
 
