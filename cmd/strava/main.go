@@ -128,7 +128,7 @@ func indexSegment(sti SegmentToIndex) {
 	}
 
 	// Save in algolia
-	client := search.NewClient("1QMZVCS1V5", "")
+	client := search.NewClient("1QMZVCS1V5", "ce8204aceaad508985a48e97bc30e353")
 	// Create a new index and add a record
 	index := client.InitIndex("profiles")
 	resSave, err := index.SaveObjects(segment)

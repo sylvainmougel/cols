@@ -1,16 +1,39 @@
-const list = document.getElementById("stash");
-let button = document.getElementById('button');
+const tagIDs = ['tdf2024', 's11', 's14','s18']
+let elems = new Map();
+for (let tag of tagIDs) {
+    let e = document.getElementById(tag)
+    e.addEventListener('click', function () {
+        showProfile()
+    });
+    elems.set(tag, e)
+}
+
 
 function showProfile() {
+    // Compute filter
+    let filters = ""
+    for (const [key, value] of elems) {
+        if (value.checked) {
+            if (filters !== "") {
+                filters += " OR "
+            }
+            filters += key
+        }
+    }
+    console.log("filters: ", filters)
+    if (filters=== "") {
+        let plot = document.getElementById('plot');
+        plot.innerHTML = '';
+        return
+    }
+    // Display graph.
     let altitude = []
     let distance = []
     let traces = [];
-    let tag = document.getElementById('tag').value;
     const client = algoliasearch('1QMZVCS1V5', 'cb6b989a18ef9a3070d5b5a54001a3da');
     const index = client.initIndex('profiles');
     const bar = new Promise((resolve, reject) => {
-        index.search("", {filters: tag}).then(({hits}) => {
-            console.log(hits)
+        index.search("", {filters: filters}).then(({hits}) => {
             hits.forEach((res => {
                 altitude = res["slaltitude"]
                 distance = res["distance"]
@@ -50,10 +73,9 @@ function showProfile() {
 
 showProfile()
 
-// Add a 'click' event listener to the button
-button.addEventListener('click', function () {
-    showProfile()
-});
+
+
+
 
 
 
