@@ -37,3 +37,21 @@ curl -s -X 'GET' \
   -H 'Authorization: Bearer 11565fd054b1192df14c0c0a2db8128dac27cda1' | jq > stream.json
 
 ```
+
+Search segment in algolia
+
+```shell
+export INDEX="profiles"
+export API_KEY="cb6b989a18ef9a3070d5b5a54001a3da"
+export APPLICATION_ID="1QMZVCS1V5"
+export ALGOLIA_HOST="https://${APPLICATION_ID}.algolia.net"
+```
+
+```shell
+curl -s -k -X POST --location "${ALGOLIA_HOST}/1/indexes/${INDEX}/query" \
+    -H "x-algolia-application-id: ${APPLICATION_ID}" \
+    -H "x-algolia-api-key: ${API_KEY}" \
+    -d '
+    {"attributesToRetrieve": [ "name", "objectID", "_tags"], "filters": "perso"}
+    ' | jq .hits 
+```

@@ -5,41 +5,43 @@ function showProfile() {
     let altitude = []
     let distance = []
     let traces = [];
+    let tag = document.getElementById('tag').value;
     const client = algoliasearch('1QMZVCS1V5', 'cb6b989a18ef9a3070d5b5a54001a3da');
     const index = client.initIndex('profiles');
     const bar = new Promise((resolve, reject) => {
-        index.getObjects(['17275870', '5211636']).then(({results}) => {
-            results.forEach((res => {
-                altitude = res["profile"]["altitude"]["data"]
-                distance = res["profile"]["distance"]["data"]
+        index.search("", {filters: tag}).then(({hits}) => {
+            console.log(hits)
+            hits.forEach((res => {
+                altitude = res["slaltitude"]
+                distance = res["distance"]
+                slope = res["slope"]
+                colors = []
+                slope.forEach(s => {
+                    if (s <= 6) {
+                        colors.push("green")
+                    } else if (s <= 8) {
+                        colors.push("blue")
+                    } else if (s <= 10) {
+                        colors.push("red")
+                    } else {
+                        colors.push("black")
+                    }
+                });
                 const trace = {
                     x: distance,
                     y: altitude,
-                    type: 'scatter'
+                    mode: 'markers+lines',
+                    marker: {'color': colors},
+                    line: {'color': 'gray'},
+                    type: 'scatter',
+                    name: res["name"]
                 };
                 traces.push(trace)
             }))
-            resolve()
-        });
-        index.getObjects(['17275870', '5211636']).then(({res} )=> {
-            console.log(res)
-            res.forEach((hit => {
-
-                const trace = {
-                    x: distance,
-                    y: altitude,
-                    type: 'scatter'
-                };
-                traces.push(trace)
-
-            }))
-
-
             resolve()
         });
     })
     bar.then(() => {
-
             Plotly.newPlot('plot', traces);
         }
     )
