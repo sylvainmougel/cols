@@ -1,4 +1,4 @@
-const tagIDs = ['tdf2024', 's11', 's14','s15', 's19']
+const tagIDs = ['tdf2024', 's11', 's14','s15', 's19', 's20']
 let elems = new Map()
 // Create the document
 for (let tag of tagIDs) {
